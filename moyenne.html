@@ -199,7 +199,9 @@
       <textarea placeholder="Expliquez librement ce qui pourrait être amélioré..."></textarea>
 
       <div class="actions">
-        <a href="public.html" class="btn btn-public" onclick="envoyerFeedback('excellent','public')">💎 Publier en public</a>
+        <a href="public.html" 
+          class="btn btn-public" 
+          onclick="envoyerFeedback('excellent','public')">💎 Publier en public</a>
         <a href="merci-prive.html" class="btn btn-private" onclick="envoyerFeeddback('moyen','prive')">📩 Envoyer en privé</a>
       </div>
     </div>
@@ -212,12 +214,14 @@ let envoiEnCours = false;
     
 function envoyerFeedback(type, canal) {
    if (envoiEnCours) return;
-
-  envoiEnCours = true;
+   envoiEnCours = true;
   
-const message = document.querySelector("textarea").value;
-const motifs = Array.from(document.querySelectorAll('input[name="problem"]:checked'))
-  .map(el => el.value);
+const textarea = document.querySelector("textarea");
+const message = textarea ? textarea.value : "";
+  
+const motifs = Array.from(
+  document.querySelectorAll('input[name="problem"]:checked')
+).map(el => el.value).join(", ");
 
   const boutons = document.querySelectorAll(".btn");
   boutons.forEach(btn => {
@@ -226,19 +230,7 @@ const motifs = Array.from(document.querySelectorAll('input[name="problem"]:check
     btn.style.pointerEvents = "none";
   });
 
-  let status = document.getElementById("status-message");
-  if (!status) {
-    status = document.createElement("div");
-    status.id = "status-message";
-    status.style.marginTop = "12px";
-    status.style.textAlign = "center";
-    status.style.color = "rgba(255,255,255,0.75)";
-    status.style.fontSize = "0.95rem";
-    document.querySelector(".actions").after(status);
-  }
-
-  status.textContent = "Envoi en cours...";
-  
+ 
   fetch(APPS_SCRIPT_URL, {
     method: "POST",
     body: JSON.stringify({
@@ -248,25 +240,10 @@ const motifs = Array.from(document.querySelectorAll('input[name="problem"]:check
       message: message,
       canal: canal
     })
-  })
- .then(() => {
-    status.textContent = "Merci, votre retour a bien été envoyé.";
-    if (canal === "prive") {
-      window.location.href = "merci-prive.html";
-    } else {
-      window.location.href = "public.html";
-    }
-  })
-  .catch(() => {
-    status.textContent = "Erreur d'envoi";
-    envoiEnCours = false;
-
-    boutons.forEach(btn => {
-      btn.disabled = false;
-      btn.style.opacity = "1";
-      btn.style.pointerEvents = "auto";
-    });
+  }).finally(() => {
+    window.location.href = "merci-prive.html";
   });
+  return false;
 }
 </script>
 </body>
