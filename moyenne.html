@@ -199,13 +199,75 @@
       <textarea placeholder="Expliquez librement ce qui pourrait être amélioré..."></textarea>
 
       <div class="actions">
-        <a href="public.html" class="btn btn-public">💎 Publier en public</a>
-        <a href="merci-prive.html" class="btn btn-private">📩 Envoyer en privé</a>
+        <a href="public.html" class="btn btn-public" onclick="envoyerFeedback('excellent','public')">💎 Publier en public</a>
+        <a href="merci-prive.html" class="btn btn-private" onclick="envoyerFeeddback('moyen','prive')">📩 Envoyer en privé</a>
       </div>
     </div>
 
     <a href="index.html" class="back">← Retour</a>
   </main>
+   <script>
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwa-V9eg1THEMb-UUZJCUNHmyzjK15UTU7qEqIC2zXSdWZ9IqbDZE1rDlCXI_CGt7P0/exec";
+let envoiEnCours = false;
+    
+function envoyerFeedback(type, canal) {
+   if (envoiEnCours) return;
 
+  envoiEnCours = true;
+  
+const message = document.querySelector("textarea").value;
+const motifs = Array.from(document.querySelectorAll('input[name="problem"]:checked'))
+  .map(el => el.value);
+
+  const boutons = document.querySelectorAll(".btn");
+  boutons.forEach(btn => {
+    btn.disabled = true;
+    btn.style.opacity = "0.6";
+    btn.style.pointerEvents = "none";
+  });
+
+  let status = document.getElementById("status-message");
+  if (!status) {
+    status = document.createElement("div");
+    status.id = "status-message";
+    status.style.marginTop = "12px";
+    status.style.textAlign = "center";
+    status.style.color = "rgba(255,255,255,0.75)";
+    status.style.fontSize = "0.95rem";
+    document.querySelector(".actions").after(status);
+  }
+
+  status.textContent = "Envoi en cours...";
+  
+  fetch(APPS_SCRIPT_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      restaurant: "Le Royal Trinité",
+      type: type,
+      motifs: motifs,
+      message: message,
+      canal: canal
+    })
+  })
+ .then(() => {
+    status.textContent = "Merci, votre retour a bien été envoyé.";
+    if (canal === "prive") {
+      window.location.href = "merci-prive.html";
+    } else {
+      window.location.href = "public.html";
+    }
+  })
+  .catch(() => {
+    status.textContent = "Erreur d'envoi";
+    envoiEnCours = false;
+
+    boutons.forEach(btn => {
+      btn.disabled = false;
+      btn.style.opacity = "1";
+      btn.style.pointerEvents = "auto";
+    });
+  });
+}
+</script>
 </body>
 </html>
