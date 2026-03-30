@@ -108,82 +108,60 @@
     </p>
 
     <div class="buttons">
-      <a href="https://www.google.fr/maps/place/Royal+Trinit%C3%A9/@48.8925017,2.1776482,11.9z/data=!4m8!3m7!1s0x47e66e362cf628d1:0x4faa91644f1396f1!8m2!3d48.8761375!4d2.3321137!9m1!1b1!16s%2Fg%2F1td0mb54?entry=ttu&g_ep=EgoyMDI2MDMyMy4xIKXMDSoASAFQAw%3D%3D target="_blank" 
-        class="btn google" 
-        onclick="event.preventdefault()('excellent','public'); window.open(this.ref, 'blank');"> 
-        Google Maps</a>
-      <a href="https://maps.apple.com/place?place-id=IFDED2D2025FBB4C8&address=59+Rue+de+Châteaudun%2C+75009+Paris%2C+France&coordinate=48.876159%2C2.332028&name=Le+Royal+Trinité&_provider=9902 target="_blank" 
-        class="btn apple" 
-        onclick="event.preventDefault(); enoyerFeedback('excellent','public'); window.open(this.href, blank');">🍏 Apple Plans</a>
-      <a href="#" class="btn" onclick="alert('Le compte Instagram sera bientôt disponible 📸'); return false;">
-  📸 Instagram (bientôt disponible)
-</a>  </div>
+  <a href="https://www.google.fr/maps/place/TON_LIEN_ICI"
+     class="btn google"
+     onclick="ouvrirAvis(event, 'excellent', 'public', this.href)">
+     📍 Google Maps
+  </a>
 
+  <a href="https://maps.apple.com/?TON_LIEN_ICI"
+     class="btn apple"
+     onclick="ouvrirAvis(event, 'excellent', 'public', this.href)">
+     🍏 Apple Plans
+  </a>
+
+  <a href="#"
+     class="btn"
+     onclick="event.preventDefault(); alert('Le compte Instagram sera bientôt disponible 📸');">
+     📸 Instagram (bientôt disponible)
+  </a>
+</div>
     <a href="index.html" class="back">← Retour</a>
   </div>
   
- <script>
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwa-V9eg1THEMb-UUZJCUNHmyzjK15UTU7qEqIC2zXSdWZ9IqbDZE1rDlCXI_CGt7P0/exec";
+<script>
+const APPS_SCRIPT_URL = "TON_URL_APPS_SCRIPT_ICI";
 let envoiEnCours = false;
-    
+
 function envoyerFeedback(type, canal) {
-   if (envoiEnCours) return;
-
+  if (envoiEnCours) return Promise.resolve(false);
   envoiEnCours = true;
-  
-const message = document.querySelector("textarea") ? document.querySelector("textarea").value : "";
-const motifs = Array.from(document.querySelectorAll('input[name="problem"]:checked'))
-  .map(el => el.value);
 
-  const boutons = document.querySelectorAll(".btn");
-  boutons.forEach(btn => {
-    btn.disabled = true;
-    btn.style.opacity = "0.6";
-    btn.style.pointerEvents = "none";
-  });
+  const payload = {
+    restaurant: "Le Royal Trinité",
+    type: type,
+    motifs: "",
+    message: "",
+    canal: canal
+  };
 
-  let status = document.getElementById("status-message");
-  if (!status) {
-    status = document.createElement("div");
-    status.id = "status-message";
-    document.body.appendChild(status);
-  }
-    status.style.marginTop = "12px";
-    status.style.textAlign = "center";
-    status.style.color = "rgba(255,255,255,0.75)";
-    status.style.fontSize = "0.95rem";
-    document.querySelector(".buttons").after(status);
-  }
-
-  status.textContent = "Envoi en cours...";
-  
-  fetch(APPS_SCRIPT_URL, {
+  return fetch(APPS_SCRIPT_URL, {
     method: "POST",
-    body: JSON.stringify({
-      restaurant: "Le Royal Trinité",
-      type: type,
-      motifs: motifs,
-      message: message,
-      canal: canal
-    })
-  })
- .then(() => {
-    status.textContent = "Merci, votre retour a bien été envoyé.";
-    if (canal === "prive") {
-      window.location.href = "merci-prive.html";
-    } else {
-      window.location.href = "public.html";
-    }
-  })
-  .catch(() => {
-    status.textContent = "Erreur d'envoi";
-    envoiEnCours = false;
-
-    boutons.forEach(btn => {
-      btn.disabled = false;
-      btn.style.opacity = "1";
-      btn.style.pointerEvents = "auto";
+    mode: "no-cors",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  }).then(() => true)
+    .catch(() => false)
+    .finally(() => {
+      envoiEnCours = false;
     });
+}
+
+function ouvrirAvis(event, type, canal, url) {
+  event.preventDefault();
+
+  envoyerFeedback(type, canal).finally(() => {
+    window.open(url, "_blank");
   });
 }
 </script>
