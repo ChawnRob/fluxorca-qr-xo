@@ -112,10 +112,72 @@
       <a href="https://maps.apple.com/place?place-id=IFDED2D2025FBB4C8&address=59+Rue+de+Châteaudun%2C+75009+Paris%2C+France&coordinate=48.876159%2C2.332028&name=Le+Royal+Trinité&_provider=9902 target="_blank" class="btn apple" onclick="envoyerFeedback('excellent','public')">🍏 Apple Plans</a>
       <a href="#" class="btn" onclick="alert('Le compte Instagram sera bientôt disponible 📸'); return false;">
   📸 Instagram (bientôt disponible)
-</a>    </div>
+</a>  </div>
 
     <a href="index.html" class="back">← Retour</a>
   </div>
+ <script>
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwa-V9eg1THEMb-UUZJCUNHmyzjK15UTU7qEqIC2zXSdWZ9IqbDZE1rDlCXI_CGt7P0/exec";
+let envoiEnCours = false;
+    
+function envoyerFeedback(type, canal) {
+   if (envoiEnCours) return;
 
+  envoiEnCours = true;
+  
+const message = document.querySelector("textarea").value;
+const motifs = Array.from(document.querySelectorAll('input[name="problem"]:checked'))
+  .map(el => el.value);
+
+  const boutons = document.querySelectorAll(".btn");
+  boutons.forEach(btn => {
+    btn.disabled = true;
+    btn.style.opacity = "0.6";
+    btn.style.pointerEvents = "none";
+  });
+
+  let status = document.getElementById("status-message");
+  if (!status) {
+    status = document.createElement("div");
+    status.id = "status-message";
+    status.style.marginTop = "12px";
+    status.style.textAlign = "center";
+    status.style.color = "rgba(255,255,255,0.75)";
+    status.style.fontSize = "0.95rem";
+    document.querySelector(".actions").after(status);
+  }
+
+  status.textContent = "Envoi en cours...";
+  
+  fetch(APPS_SCRIPT_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      restaurant: "Le Royal Trinité",
+      type: type,
+      motifs: motifs,
+      message: message,
+      canal: canal
+    })
+  })
+ .then(() => {
+    status.textContent = "Merci, votre retour a bien été envoyé.";
+    if (canal === "prive") {
+      window.location.href = "merci-prive.html";
+    } else {
+      window.location.href = "public.html";
+    }
+  })
+  .catch(() => {
+    status.textContent = "Erreur d'envoi";
+    envoiEnCours = false;
+
+    boutons.forEach(btn => {
+      btn.disabled = false;
+      btn.style.opacity = "1";
+      btn.style.pointerEvents = "auto";
+    });
+  });
+}
+</script>
 </body>
 </html>
