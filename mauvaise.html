@@ -195,13 +195,47 @@
       <textarea placeholder="Expliquez librement ce qui n’allait pas..."></textarea>
 
       <div class="actions">
-        <a href="merci-prive.html" class="btn btn-private">📩 Envoyer en privé</a>
-        <a href="public.html" class="btn btn-public">💎 Envoyer en public</a>
+        <button onclick="envoyerFeedback('mauvaise', 'prive')" class="btn btn-private">
+            📩 Envoyer en privé
+         </button>      
+        <button onclick="envoyerFeedback('mauvaise', 'public')" class="btn btn-public">
+          💎 Envoyer en public
+      </button>     
       </div>
     </div>
 
     <a href="index.html" class="back">← Retour</a>
   </main>
+  <script>
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwa-V9eg1THEMb-UUZJCUNHmyzjK15UTU7qEqIC2zXSdWZ9IqbDZE1rDlCXI_CGt7P0/exec";
 
+function envoyerFeedback(type, canal) {
+
+const message = document.querySelector("textarea").value;
+
+const motifs = Array.from(document.querySelectorAll('input[name="problem"]:checked'))
+  .map(el => el.value);
+  
+  fetch(APPS_SCRIPT_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      restaurant: "Le Royal Trinité",
+      type: type,
+      motifs: motifs,
+      message: message,
+      canal: canal
+    })
+  })
+ .then(() => {
+  if (canal === "prive") {
+    window.location.href = "merci-prive.html";
+  } else {
+    window.location.href = "public.html";
+  }
+})  .catch(() => {
+    alert("Erreur d'envoi");
+  });
+}
+</script>
 </body>
 </html>
