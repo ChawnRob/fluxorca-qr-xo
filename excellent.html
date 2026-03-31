@@ -107,27 +107,25 @@
       Si vous avez apprécié votre expérience, vous pouvez la partager ici :
     </p>
 
-    <div class="buttons">
-  <a href="https://script.google.com/macros/s/AKfycbwa-V9eg1THEMb-UUZJCUNHmyzjK15UTU7qEqIC2zXSdwZ9IqbDZE1rD1CXI_CGt7P0/exec
-"
-   target="_blank"
-   class="btn google"
-   onclick="envoyerFeedback('excellent','public')">
-   📍 Google Maps
-</a>  
-<a href="
-https://script.google.com/macros/s/AKfycbwa-V9eg1THEMb-UUZJCUNHmyzjK15UTU7qEqIC2zXSdwZ9IqbDZE1rD1CXI_CGt7P0/exec"
-   target="_blank"
-   class="btn apple"
-   onclick="envoyerFeedback('excellent','public')">
-   🍏 Apple Plans
-</a>
-</div>
-    <a href="index.html" class="back">← Retour</a>
-  </div>
-  
+   <div class="buttons">
+
+  <a href="https://www.google.com/maps/place/Le+Royal+Trinité"
+     target="_blank"
+     class="btn google"
+     onclick="envoyerFeedback('excellent','public')">
+     📍 Google Maps
+  </a>
+
+  <a href="https://maps.apple.com/?q=Le+Royal+Trinité"
+     target="_blank"
+     class="btn apple"
+     onclick="envoyerFeedback('excellent','public')">
+     🍏 Apple Plans
+  </a>
+
+</div>  
 <script>
-const APPS_SCRIPT_URL = "COLLE_ICI_TON_URL_APPS_SCRIPT";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwa-V9eg1THEMb-UUZJCUNHmyzjK15UTU7qEqIC2zXSdwZ9IqbDZE1rD1CXI_CGt7P0/exec;
 
 function envoyerSimple(type, canal) {
   fetch(APPS_SCRIPT_URL, {
