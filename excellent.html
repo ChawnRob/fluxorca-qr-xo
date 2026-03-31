@@ -112,21 +112,20 @@
   <a href="https://www.google.com/maps/place/Le+Royal+Trinité"
      target="_blank"
      class="btn google"
-     onclick="envoyerFeedback('excellent','public')">
+     onclick="envoyerSimple('excellent','public')">
      📍 Google Maps
   </a>
 
   <a href="https://maps.apple.com/?q=Le+Royal+Trinité"
      target="_blank"
      class="btn apple"
-     onclick="envoyerFeedback('excellent','public')">
+     onclick="envoyerSimple('excellent','public')">
      🍏 Apple Plans
   </a>
 
 </div>  
 <script>
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwa-V9eg1THEMb-UUZJCUNHmyzjK15UTU7qEqIC2zXSdwZ9IqbDZE1rD1CXI_CGt7P0/exec;
-
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwa-V9eg1THEMb-UUZJCUNHmyzjK15UTU7qEqIC2zXSdwZ9IqbDZE1rD1CXI_CGt7P0/exec";
 function envoyerSimple(type, canal) {
   fetch(APPS_SCRIPT_URL, {
     method: "POST",
