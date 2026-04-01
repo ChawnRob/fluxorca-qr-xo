@@ -117,7 +117,7 @@
   </a>
 
   <a href="https://maps.apple.com/?q=Le+Royal+Trinité"
-     target="_blank"
+    target="_blank"
      class="btn apple"
      onclick="envoyerSimple('excellent','public')">
      🍏 Apple Plans
@@ -125,20 +125,20 @@
 
 </div>  
 <script>
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwa-V9eg1THEMb-UUZJCUNHmyzjK15UTU7qEqIC2zXSdWZ9IqbDZE1rDlCXI_CGt7P0/exec";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwa-V9eg1THEMb-UUZJCUNHmyzjK15UTU7qEqIC2zXSdWZ9IqbDZE1rD1CXI_CGt7P0/exec";
+
 function envoyerSimple(type, canal) {
-  fetch(APPS_SCRIPT_URL, {
-    method: "POST",
-    mode: "no-cors",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
+  navigator.sendBeacon(
+    APPS_SCRIPT_URL,
+    JSON.stringify({
       restaurant: "Le Royal Trinité",
       type: type,
       motifs: "",
       message: "",
       canal: canal
     })
-  });
+  );
 }
-</script></body>
+</script>
+</body>
 </html>
