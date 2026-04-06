@@ -1,5 +1,5 @@
 const config = {
-  webhookUrl: "COLLE_TON_WEBHOOK_ICI",
+  webhookUrl: "https://hook.eu1.make.com/ih8f89mg66dyd38dm8qwbvm3h3tpofgz",
 };
 
 function sendData(type, details = {}) {
