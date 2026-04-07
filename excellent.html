@@ -69,33 +69,18 @@
       font-weight: 700;
       font-size: 1rem;
       color: white;
-      border: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.07);
       transition: 0.2s;
     }
 
     .btn:hover {
       transform: translateY(-1px);
-      background: rgba(255,255,255,0.1);
-    }
-
-    .google { background: #1a3d1f; }
-    .apple { background: #1a1a1a; }
-    .trust { background: #11352b; }
-
-    .back {
-      margin-top: 22px;
-      display: inline-block;
-      font-size: 0.9rem;
-      color: rgba(255,255,255,0.6);
-      text-decoration: none;
-    }
-
-    .back:hover {
-      color: white;
+      background: rgba(255,255,255,0.13);
     }
 
   </style>
+  <script src="js/tracker.js"></script>
 </head>
 <body>
 
@@ -107,39 +92,31 @@
       Si vous avez apprécié votre expérience, vous pouvez la partager ici :
     </p>
 
-   <div class="buttons">
+    <div class="buttons">
+      <a id="btn-google" href="#" target="_blank" class="btn" onclick="trackEtOuvrir(event, 'google')">
+        📍 Google Maps
+      </a>
+      <a id="btn-apple" href="#" target="_blank" class="btn" onclick="trackEtOuvrir(event, 'apple')">
+        🍏 Apple Plans
+      </a>
+    </div>
+  </div>
 
-  <a href="https://www.google.com/maps/place/Le+Royal+Trinité"
-     target="_blank"
-     class="btn google"
-     onclick="envoyerSimple('excellent','public')">
-     📍 Google Maps
-  </a>
+  <script>
+    const PLATFORM_URLS = {
+      google: "https://www.google.com/maps/place/Le+Royal+Trinit%C3%A9",
+      apple:  "https://maps.apple.com/?q=Le+Royal+Trinité",
+    };
 
-  <a href="https://maps.apple.com/?q=Le+Royal+Trinité"
-    target="_blank"
-     class="btn apple"
-     onclick="envoyerSimple('excellent','public')">
-     🍏 Apple Plans
-  </a>
+    // Track le chargement de la page excellent
+    track({ choix: "excellent", canal: "page_chargee" });
 
-</div>  
-<script>
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwa-V9eg1THEMb-UUZJCUNHmyzjK15UTU7qEqIC2zXSdWZ9IqbDZE1rD1CXI_CGt7P0/exec";
+    document.getElementById("btn-google").href = PLATFORM_URLS.google;
+    document.getElementById("btn-apple").href  = PLATFORM_URLS.apple;
 
-function envoyerSimple(type, canal) {
-  navigator.sendBeacon(
-    APPS_SCRIPT_URL,
-    JSON.stringify({
-      restaurant: "Le Royal Trinité",
-      type: type,
-      motifs: "",
-      message: "",
-      canal: canal
-    })
-  );
-}
-</script>
-    <scrip src="js/tracker.js"></scrip>
+    function trackEtOuvrir(event, plateforme) {
+      track({ choix: "excellent", canal: "public", motifs: plateforme });
+    }
+  </script>
 </body>
 </html>
