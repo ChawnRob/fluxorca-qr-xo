@@ -89,19 +89,22 @@
     }
 
     .btn-excellent {
-      background: linear-gradient(180deg, #32e686 0%, #19c86a 100%);
-      box-shadow: 0 0 26px rgba(50, 230, 134, 0.25);
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.14);
     }
 
     .btn-average {
-      background: linear-gradient(180deg, #ffcb2f 0%, #f0ad00 100%);
-      box-shadow: 0 0 26px rgba(255, 203, 47, 0.22);
-      color: #1c1400;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.14);
     }
 
     .btn-bad {
-      background: linear-gradient(180deg, #ff6767 0%, #f04444 100%);
-      box-shadow: 0 0 26px rgba(240, 68, 68, 0.25);
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.13);
     }
 
     .channels {
@@ -139,14 +142,15 @@
       }
     }
   </style>
+  <script src="js/tracker.js"></script>
 </head>
 <body>
   <main class="card">
     <div class="logo">FLUXORCA</div>
 
-    <h1>Comment s’est passée votre expérience&nbsp;?</h1>
+    <h1>Comment s'est passée votre expérience ?</h1>
     <p class="subtitle">
-      Votre retour nous aide à mieux comprendre votre passage et à améliorer l’expérience.
+      Votre retour nous aide à mieux comprendre votre passage et à améliorer l'expérience.
     </p>
 
     <div class="buttons">
@@ -162,5 +166,13 @@
       <span class="chip">📸 Instagram</span>
     </div>
   </main>
+
+  <script>
+    // Injecte ?client=X&table=Y dans tous les liens de navigation
+    injectSessionParams();
+
+    // Track la vue de la page d'accueil
+    track({ choix: "vue_index", canal: "" });
+  </script>
 </body>
 </html>
