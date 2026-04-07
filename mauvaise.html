@@ -117,24 +117,15 @@
       font-weight: 800;
       font-size: 1rem;
       transition: 0.18s ease;
-      border: 1px solid transparent;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(255, 255, 255, 0.07);
+      color: #fff;
+      cursor: pointer;
     }
 
     .btn:hover {
       transform: translateY(-1px);
       opacity: 0.96;
-    }
-
-    .btn-private {
-      background: linear-gradient(180deg, #b92e2e 0%, #8f1f1f 100%);
-      color: #fff;
-      box-shadow: 0 0 22px rgba(185, 46, 46, 0.24);
-    }
-
-    .btn-public {
-      background: linear-gradient(180deg, #ffb132 0%, #d97d00 100%);
-      color: #231500;
-      box-shadow: 0 0 22px rgba(255, 177, 50, 0.22);
     }
 
     .back {
@@ -160,6 +151,7 @@
       }
     }
   </style>
+  <script src="js/tracker.js"></script>
 </head>
 <body>
 
@@ -168,7 +160,7 @@
 
     <h1>On veut comprendre 🙏</h1>
     <p class="subtitle">
-      Pouvez-vous nous expliquer ce qui n’allait pas afin de nous aider à mieux faire la prochaine fois ?
+      Pouvez-vous nous expliquer ce qui n'allait pas afin de nous aider à mieux faire la prochaine fois ?
     </p>
 
     <div class="form-box">
@@ -192,29 +184,27 @@
         <span>Autre</span>
       </label>
 
-      <textarea placeholder="Expliquez librement ce qui n’allait pas..."></textarea>
+      <textarea placeholder="Expliquez librement ce qui n'allait pas..."></textarea>
 
       <div class="actions">
-        <button class="btn btn-private" onclick="envoyerFeedback('mauvaise','prive')"> Envoyer en privé
-        <button class="btn btn-public" onclick="envoyerFeedback('mauvaise','public')">  Envoyer en public
-      </button>     
+        <button class="btn" onclick="envoyerFeedback('mauvaise','prive')">Envoyer en privé</button>
+        <button class="btn" onclick="envoyerFeedback('mauvaise','public')">Envoyer en public</button>
       </div>
     </div>
 
     <a href="index.html" class="back">← Retour</a>
   </main>
-  <script>
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwa-V9eg1THEMb-UUZJCUNHmyzjK15UTU7qEqIC2zXSdWZ9IqbDZE1rDlCXI_CGt7P0/exec";
-let envoiEnCours = false;
-    
-function envoyerFeedback(type, canal) {
-   if (envoiEnCours) return;
 
+  <script>
+let envoiEnCours = false;
+
+function envoyerFeedback(type, canal) {
+  if (envoiEnCours) return;
   envoiEnCours = true;
-  
-const message = document.querySelector("textarea").value;
-const motifs = Array.from(document.querySelectorAll('input[name="problem"]:checked'))
-  .map(el => el.value);
+
+  const message = document.querySelector("textarea").value;
+  const motifs  = Array.from(document.querySelectorAll('input[name="problem"]:checked'))
+    .map(el => el.value).join(", ");
 
   const boutons = document.querySelectorAll(".btn");
   boutons.forEach(btn => {
@@ -227,37 +217,24 @@ const motifs = Array.from(document.querySelectorAll('input[name="problem"]:check
   if (!status) {
     status = document.createElement("div");
     status.id = "status-message";
-    status.style.marginTop = "12px";
-    status.style.textAlign = "center";
-    status.style.color = "rgba(255,255,255,0.75)";
-    status.style.fontSize = "0.95rem";
+    status.style.cssText = "margin-top:12px;text-align:center;color:rgba(255,255,255,0.75);font-size:0.95rem;";
     document.querySelector(".actions").after(status);
   }
+  status.textContent = "Envoi en cours…";
 
-  status.textContent = "Envoi en cours...";
-  
-  fetch(APPS_SCRIPT_URL, {
-    method: "POST",
-    body: JSON.stringify({
-      restaurant: "Le Royal Trinité",
-      type: type,
-      motifs: motifs,
-      message: message,
-      canal: canal
-    })
-  })
- .then(() => {
+  track({
+    choix   : "mauvais",
+    canal   : canal,
+    motifs  : motifs,
+    message : message,
+  }).then(() => {
     status.textContent = "Merci, votre retour a bien été envoyé.";
-    if (canal === "prive") {
-      window.location.href = "merci-prive.html";
-    } else {
-      window.location.href = "public.html";
-    }
-  })
-  .catch(() => {
-    status.textContent = "Erreur d'envoi";
+    setTimeout(() => {
+      window.location.href = canal === "prive" ? "merci-prive.html" : "public.html";
+    }, 800);
+  }).catch(() => {
+    status.textContent = "Erreur d'envoi — réessayez.";
     envoiEnCours = false;
-
     boutons.forEach(btn => {
       btn.disabled = false;
       btn.style.opacity = "1";
@@ -265,7 +242,6 @@ const motifs = Array.from(document.querySelectorAll('input[name="problem"]:check
     });
   });
 }
-</script>
-  <script src="js/tracker.js"></script>
+  </script>
 </body>
 </html>
