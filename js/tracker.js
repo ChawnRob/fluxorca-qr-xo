@@ -54,7 +54,7 @@ function track(payload) {
 
   const sends = [];
 
-  if (FLUXORCA_CONFIG.webhookUrl) {
+  if (false) {
     sends.push(
       fetch(FLUXORCA_CONFIG.webhookUrl, {
         method : "POST",
