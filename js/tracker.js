@@ -4,7 +4,7 @@
 
 const FLUXORCA_CONFIG = {
   webhookUrl: "https://hook.eu1.make.com/ih8f89mg66dyd38dm8qwbvm3h3tpofgz",
-  appsScriptUrl: "https://script.google.com/macros/s/AKfycbwa-V9eg1THEMb-UUZJCUNHmyzjK15UTU7qEqIC2zXSdWZ9IqbDZE1rDlCXI_CGt7P0/exec",
+  appsScriptUrl: "https://script.google.com/macros/s/AKfycbxo8PNOCY_I9r4qjR5JVeSMnhnrRIUcGmiTZ5oK-U6bYw7RfpPT6-7WOAovSEGaYh4/exec",
   debug: false,
 };
 
